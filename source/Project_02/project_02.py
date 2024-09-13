@@ -31,22 +31,23 @@ class Molecule:
 
     def mass_weighted_hessian(self):
         """Calculate the mass-weighted Hessian matrix
-        output: mass-weighted Hessian matrix"""
+        output: mass-weighted Hessian matrix (np.ndarray)"""
         masses = np.repeat(np.array([1 / np.sqrt(ELEMENTS[c].mass) for c in self.charges]), 3)
         return np.einsum('i,j,ij->ij', masses, masses, self.hess)
 
     def eig_mass_weighted_hessian(self):
         """Calculate the Hermitian eigenvalues of the mass-weighted Hessian matrix
-        output: Hermitian eigenvalues of mass-weighted Hessian matrix"""
+        output: Hermitian eigenvalues of mass-weighted Hessian matrix (np.ndarray)"""
         return np.linalg.eigvalsh(self.mass_weighted_hessian())
     
     def harmonic_vib_freq(self):
         """Calculate the harmonic vibrational frequencies
-        output: harmonic vibrational frequencies"""
+        output: harmonic vibrational frequencies (np.ndarray)"""
         eig = self.eig_mass_weighted_hessian()
         return np.sign(eig) * np.sqrt(np.abs(eig)) * centi/(2*np.pi*c) * (np.sqrt(E_h/amu/a_0**2))
     
     def print_solution_02(self):
+        """Print the solution for Project 02"""
         print("=== Mass-Weighted Hessian Matrix (in unit Eh/(amu*a0^2)) ===")
         print(self.mass_weighted_hessian())
         print("=== Eigenvalues of Mass-Weighted Hessian Matrix (in unit Eh/(amu*a0^2)) ===")
